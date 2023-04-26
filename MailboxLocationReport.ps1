@@ -24,6 +24,7 @@ $fullOutputPath = $outputFilePath + $outputFileName
 
 #Capture all recipient objects in the organization.  This allows us to test for any componentShard or Office 365 groups which are not just mailboxes.
 
+<#
 try {
     write-host "Gathering all Office 365 Recipients"
     $workingRecipients = get-recipient -resultsize unlimited -errorAction STOP
@@ -32,6 +33,12 @@ catch {
     write-host "Unable to obtain all recipients in Office 365."
     write-error $_
 }
+
+#>
+
+$workingRecipients += Get-Recipient "tim@e-mcmichael.com"
+$workingRecipients += Get-Recipient "amy@e-mcmichael.com"
+$workingRecipients += Get-Recipient "sharon@e-mcmichael.com"
 
 #Iterate through each of the recipients and determine if there are any mailbox locations.
 
@@ -60,6 +67,7 @@ foreach ($recipient in $workingRecipients)
             write-host "Testing locations by identity successful." -ForegroundColor Green -BackgroundColor Yellow
         }
         catch {
+            $workingLocations = @()
             write-host "Testing by location unsuccessful - object does not qualify for locations." -ForegroundColor Red -BackgroundColor Yellow
             write-host "Do not add user to the output array."
         }
