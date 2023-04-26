@@ -53,7 +53,7 @@ foreach ($recipient in $workingRecipients)
     try {
         write-host "Testing locations by user."
 
-        $workingLocations += get-mailboxLocations -user $recipient.externalDirectoryObjectID -errorAction STOP
+        $workingLocations += get-mailboxLocation -user $recipient.externalDirectoryObjectID -errorAction STOP
 
         write-host "Testing locations by user successful" -ForegroundColor Green -BackgroundColor Yellow
     }
@@ -62,7 +62,7 @@ foreach ($recipient in $workingRecipients)
         try {
             write-host "Unable to obtain locations by user.  Attempt identity (works for Office 365 Groups / None Users)" -ForegroundColor Red -BackgroundColor Yellow
 
-            $workingLocations += get-mailboxLocations -identity $recipient.externalDirectoryObjectID -errorAction STOP
+            $workingLocations += get-mailboxLocation -identity $recipient.externalDirectoryObjectID -errorAction STOP
 
             write-host "Testing locations by identity successful." -ForegroundColor Green -BackgroundColor Yellow
         }
