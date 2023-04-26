@@ -16,7 +16,7 @@
 [string]$mainArchiveString = "MainArchive"
 [string]$auxArchiveString = "AuxArchive"
 
-$workingRecipients = $NULL #Holds all recipients in the organization
+[array]$workingRecipients = @() #Holds all recipients in the organization
 [array]$outputArray = @() #Holds the output of any recipient found.
 [array]$workingLocations = @() #Holds any locations found for the particular mailbox.
 
