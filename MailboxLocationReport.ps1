@@ -48,19 +48,19 @@ foreach ($recipient in $workingRecipients)
 
         $workingLocations += get-mailboxLocations -user $recipient.externalDirectoryObjectID -errorAction STOP
 
-        write-host "Testing locations by user successful"
+        write-host "Testing locations by user successful" -ForegroundColor Green -BackgroundColor Yellow
     }
     catch {
 
         try {
-            write-host "Unable to obtain locations by user.  Attempt identity (works for Office 365 Groups / None Users)"
+            write-host "Unable to obtain locations by user.  Attempt identity (works for Office 365 Groups / None Users)" -ForegroundColor Red -BackgroundColor Yellow
 
             $workingLocations += get-mailboxLocations -identity $recipient.externalDirectoryObjectID -errorAction STOP
 
-            write-host "Testing locations by identity successful."
+            write-host "Testing locations by identity successful." -ForegroundColor Green -BackgroundColor Yellow
         }
         catch {
-            write-host "Testing by location unsuccessful - object does not qualify for locations."
+            write-host "Testing by location unsuccessful - object does not qualify for locations." -ForegroundColor Red -BackgroundColor Yellow
             write-host "Do not add user to the output array."
         }
     }
@@ -73,25 +73,25 @@ foreach ($recipient in $workingRecipients)
     {
         if ($location.MailboxLocationType -eq $primaryMailboxString)
         {
-            write-host "Primary mailbox found."
+            write-host "Primary mailbox found." -ForegroundColor Blue -BackgroundColor Yellow
 
             $hasPrimaryMailbox = $true
         }
         elseif ($location.MailboxLocationType -eq $mainArchiveString)
         {
-            write-host "Primary archive found."
+            write-host "Primary archive found." -ForegroundColor Blue -BackgroundColor Yellow
 
             $hasMainArchive = $true
         }
         elseif ($location.MailboxLocationType -eq $ComponentSharedString)
         {
-            write-host "Component shared found."
+            write-host "Component shared found." -ForegroundColor Blue -BackgroundColor Yellow
 
             $hasComponentShard = $true
         }
         elseif ($location.MailboxLocationType -eq $ComponentSharedString)
         {
-            write-host "Auto expanding archive found."
+            write-host "Auto expanding archive found." -ForegroundColor Blue -BackgroundColor Yellow
 
             $hasAuxArchive = $true
 
@@ -115,6 +115,6 @@ foreach ($recipient in $workingRecipients)
     $outputArray += $functionObject
 }
 
-write-host "Concluded testing for locations - output array."
+write-host "Concluded testing for locations - output array." -ForegroundColor Green -BackgroundColor Yellow
 
 $outputArray | export-csv -Path $fullOutputPath
