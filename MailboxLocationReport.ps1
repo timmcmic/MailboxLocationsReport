@@ -104,7 +104,7 @@ foreach ($recipient in $workingRecipients)
     $functionObject = New-Object PSObject -Property @{
         ExternalDirectoryObjectID = $recipient.externalDirectoryObjectID  
         PrimarySMTPAddress = $recipient.primarySMTPAddress
-        LocationCount = $locations.count
+        LocationCount = $workingLocations.count
         HasPrimaryMailbox = $hasPrimaryMailbox
         HasMainArchive = $hasMainArchive
         HasComponentShard = $hasComponentShard
