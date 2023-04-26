@@ -1,7 +1,7 @@
 #Define user variables - please update as appropriate prior to running code.
 
 [string]$outputFileName = "mailboxLocation.csv" #Define the CSV file name.
-[string]$outputFilePath = "C:\temp\Warrior" #Define the output file path.
+[string]$outputFilePath = "C:\temp\" #Define the output file path.
 
 #Define code variables.
 
