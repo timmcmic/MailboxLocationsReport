@@ -45,7 +45,13 @@ $workingRecipients += Get-Recipient "sharon@e-mcmichael.com"
 
 foreach ($recipient in $workingRecipients)
 {
-    $workingLocations = @() #Reset the working locations to zero.
+    #Rest the working variables for this recipient.
+
+    $workingLocations = @() 
+    $hasPrimaryMailbox = $false 
+    $hasComponentShard = $false 
+    $hasMainArchive = $false
+    $hasAuxArchive = $false 
 
     write-host "Testing: "$recipient.externalDirectoryObjectID
 
