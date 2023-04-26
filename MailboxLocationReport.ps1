@@ -41,6 +41,7 @@ foreach ($recipient in $workingRecipients)
     #Rest the working variables for this recipient.
 
     $workingLocations = @() 
+    $numberOfAuxArchives = 0
     $hasPrimaryMailbox = $false 
     $hasComponentShard = $false 
     $hasMainArchive = $false
