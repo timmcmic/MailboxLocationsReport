@@ -10,6 +10,7 @@
 [boolean]$hasComponentShard = $false #If the recipient has a componentshard in Office 365.
 [boolean]$hasMainArchive = $false #If the recipient has a main archive in Office 365.
 [boolean]$hasAuxArchive = $false #If the recipient has one of more auto expanding archives.
+[boolean]$locationFound = $false #Determines if a location was found when querying mailboxes.
 
 [string]$ComponentSharedString = "ComponentShared"
 [string]$primaryMailboxString = "Primary"
@@ -56,6 +57,8 @@ foreach ($recipient in $workingRecipients)
         $workingLocations += get-mailboxLocation -user $recipient.externalDirectoryObjectID -errorAction STOP
 
         write-host "Testing locations by user successful" -ForegroundColor Green -BackgroundColor Yellow
+
+        $locationFound = $true
     }
     catch {
 
@@ -65,6 +68,8 @@ foreach ($recipient in $workingRecipients)
             $workingLocations += get-mailboxLocation -identity $recipient.externalDirectoryObjectID -errorAction STOP
 
             write-host "Testing locations by identity successful." -ForegroundColor Green -BackgroundColor Yellow
+
+            $locationFound = $true
         }
         catch {
             $workingLocations = @()
@@ -109,18 +114,21 @@ foreach ($recipient in $workingRecipients)
 
     #At this point the location information has been generated.  Now we can generate the output object.
 
-    $functionObject = New-Object PSObject -Property @{
-        ExternalDirectoryObjectID = $recipient.externalDirectoryObjectID  
-        PrimarySMTPAddress = $recipient.primarySMTPAddress
-        LocationCount = $workingLocations.count
-        HasPrimaryMailbox = $hasPrimaryMailbox
-        HasMainArchive = $hasMainArchive
-        HasComponentShard = $hasComponentShard
-        HasAuxArchive = $hasAuxArchive
-        NumberOfAuxArchives = $numberOfAuxArchives
+    if ($locationFound -eq $TRUE)
+    {
+        $functionObject = New-Object PSObject -Property @{
+            ExternalDirectoryObjectID = $recipient.externalDirectoryObjectID  
+            PrimarySMTPAddress = $recipient.primarySMTPAddress
+            LocationCount = $workingLocations.count
+            HasPrimaryMailbox = $hasPrimaryMailbox
+            HasMainArchive = $hasMainArchive
+            HasComponentShard = $hasComponentShard
+            HasAuxArchive = $hasAuxArchive
+            NumberOfAuxArchives = $numberOfAuxArchives
+        }
+    
+        $outputArray += $functionObject
     }
-
-    $outputArray += $functionObject
 }
 
 write-host "Concluded testing for locations - output array." -ForegroundColor Green -BackgroundColor Yellow
