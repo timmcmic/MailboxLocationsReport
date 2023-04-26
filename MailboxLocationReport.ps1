@@ -125,6 +125,8 @@ foreach ($recipient in $workingRecipients)
             HasAuxArchive = $hasAuxArchive
             NumberOfAuxArchives = $numberOfAuxArchives
         }
+
+        $functionObject = $functionObject | select-object ExternalDirectoryObjectID,PrimarySMTPAddress,LocationCount,HasPrimaryMailbox,HasMainArchive,HasComponentShard,HasAuxArchive,NumberOfAuxArchives
     
         $outputArray += $functionObject
     }
