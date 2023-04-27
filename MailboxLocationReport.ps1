@@ -45,7 +45,8 @@ foreach ($recipient in $workingRecipients)
     $hasPrimaryMailbox = $false 
     $hasComponentShard = $false 
     $hasMainArchive = $false
-    $hasAuxArchive = $false 
+    $hasAuxArchive = $false
+    $locationfound = $false 
 
     write-host "Testing: "$recipient.externalDirectoryObjectID
 
