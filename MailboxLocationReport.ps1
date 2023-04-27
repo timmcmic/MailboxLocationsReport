@@ -34,10 +34,18 @@ catch {
     write-error $_
 }
 
+$ProgressDelta = 100/($workingRecipients.count); $PercentComplete = 0; $MbxNumber = 0
+
 #Iterate through each of the recipients and determine if there are any mailbox locations.
 
 foreach ($recipient in $workingRecipients)
 {
+    $MbxNumber++
+
+    write-progress -activity "Processing Recipient" -status $recipient.externalDirectoryObjectID -PercentComplete $PercentComplete
+
+    $PercentComplete += $ProgressDelta
+
     #Rest the working variables for this recipient.
 
     $workingLocations = @() 
