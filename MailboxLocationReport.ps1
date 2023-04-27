@@ -48,6 +48,8 @@ foreach ($recipient in $workingRecipients)
 
     $PercentComplete += $ProgressDelta
 
+    start-sleep -s 5
+
     #Rest the working variables for this recipient.
 
     $workingLocations = @() 
