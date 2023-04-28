@@ -55,7 +55,7 @@ foreach ($recipient in $workingRecipients)
     $hasAuxArchive = $false
     $locationfound = $false 
 
-    write-host "Processing recipient number: "$recipientCounter" of total: "$workingRecipients.count
+    write-host "Processing recipient number: "$recipientCounter" of total: "$workingRecipients.count.tostring()
     $recipientCounter++
     write-host "Testing: "$recipient.externalDirectoryObjectID
 
