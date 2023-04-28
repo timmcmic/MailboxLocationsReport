@@ -42,6 +42,13 @@ $ProgressDelta = 100/($workingRecipients.count); $PercentComplete = (($mailboxCo
 
 foreach ($recipient in $workingRecipients)
 {
+
+    $progressString = "Recipient Name: "+$recipient.externalDirectoryObjectID+" Recipient Number: "+$mailboxCounter+" of "+$workingRecipients.Count
+
+    Write-Progress -Activity "Processing recipient" -Status $progressString -PercentComplete $PercentComplete -Id 1
+
+    Start-Sleep -s 5
+
     #Rest the working variables for this recipient.
 
     $workingLocations = @() 
