@@ -21,15 +21,15 @@
 [array]$outputArray = @() #Holds the output of any recipient found.
 [array]$workingLocations = @() #Holds any locations found for the particular mailbox.
 
+[int]$recipientCounter = 0
+
 $fullOutputPath = $outputFilePath + $outputFileName
 
 #Capture all recipient objects in the organization.  This allows us to test for any componentShard or Office 365 groups which are not just mailboxes.
 
 try {
     write-host "Gathering all Office 365 Recipients"
-    #$workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited | select-object externalDirectoryObjectID,primarySMTPAddress
-    $workingRecipients += get-mailbox Sharon
-    $workingRecipients += get-mailbox Dennis
+    $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited | select-object externalDirectoryObjectID,primarySMTPAddress
 }
 catch {
     write-host "Unable to obtain all recipients in Office 365."
@@ -38,17 +38,8 @@ catch {
 
 #Iterate through each of the recipients and determine if there are any mailbox locations.
 
-$ProgressDelta = 100/($workingRecipients.count); $PercentComplete = (($mailboxCounter / $workingRecipients.count)*100); $mailboxNumber = 0
-
 foreach ($recipient in $workingRecipients)
 {
-
-    $progressString = "Recipient Name: "+$recipient.externalDirectoryObjectID+" Recipient Number: "+$mailboxCounter+" of "+$workingRecipients.Count
-
-    Write-Progress -Activity "Processing recipient" -Status $progressString -PercentComplete $PercentComplete -Id 1
-
-    Start-Sleep -s 5
-
     #Rest the working variables for this recipient.
 
     $workingLocations = @() 
@@ -59,6 +50,8 @@ foreach ($recipient in $workingRecipients)
     $hasAuxArchive = $false
     $locationfound = $false 
 
+    write-host "Processing recipient number: "+$recipientCounter+" of total: "+$workingRecipients.count
+    $recipientCounter++
     write-host "Testing: "$recipient.externalDirectoryObjectID
 
     #First try to get the mailbox locations by user.  When doing so you will get a complete return of all locations.
@@ -143,9 +136,6 @@ foreach ($recipient in $workingRecipients)
     
         $outputArray += $functionObject
     }
-
-    $mailboxCounter++
-    $mailboxNumber++
 }
 
 write-host "Concluded testing for locations - output array." -ForegroundColor Green -BackgroundColor Yellow
