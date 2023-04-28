@@ -22,6 +22,7 @@
 [array]$workingLocations = @() #Holds any locations found for the particular mailbox.
 
 [int]$recipientCounter = 0
+[int]$totalRecipients = 0
 
 $fullOutputPath = $outputFilePath + $outputFileName
 
@@ -41,6 +42,8 @@ catch {
     write-error $_
 }
 
+$totalRecipients = $workingRecipients.Count
+
 #Iterate through each of the recipients and determine if there are any mailbox locations.
 
 foreach ($recipient in $workingRecipients)
@@ -55,7 +58,7 @@ foreach ($recipient in $workingRecipients)
     $hasAuxArchive = $false
     $locationfound = $false 
 
-    write-host "Processing recipient number: "$recipientCounter" of total: "$workingRecipients.count.tostring()
+    write-host "Processing recipient number: "$recipientCounter" of total: "$totalRecipients
     $recipientCounter++
     write-host "Testing: "$recipient.externalDirectoryObjectID
 
