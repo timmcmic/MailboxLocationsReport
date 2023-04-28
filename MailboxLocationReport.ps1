@@ -21,7 +21,7 @@
 [array]$outputArray = @() #Holds the output of any recipient found.
 [array]$workingLocations = @() #Holds any locations found for the particular mailbox.
 
-[int]$recipientCounter = 0
+[int]$recipientCounter = 1
 [int]$totalRecipients = 0
 
 $fullOutputPath = $outputFilePath + $outputFileName
