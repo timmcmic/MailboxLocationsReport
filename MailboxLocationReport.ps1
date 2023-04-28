@@ -29,7 +29,12 @@ $fullOutputPath = $outputFilePath + $outputFileName
 
 try {
     write-host "Gathering all Office 365 Recipients"
-    $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited | select-object externalDirectoryObjectID,primarySMTPAddress
+    #$workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited | select-object externalDirectoryObjectID,primarySMTPAddress
+    $workingRecipients += Get-Recipient tim
+    $workingRecipients += Get-Recipient amy
+    $workingRecipients += Get-Recipient sharon
+    $workingRecipients += Get-Recipient dennis
+    $workingRecipients += Get-Recipient school
 }
 catch {
     write-host "Unable to obtain all recipients in Office 365."
