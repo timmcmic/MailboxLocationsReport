@@ -38,6 +38,8 @@ catch {
 
 #Iterate through each of the recipients and determine if there are any mailbox locations.
 
+$ProgressDelta = 100/($workingRecipients.count); $PercentComplete = (($mailboxCounter / $workingRecipients.count)*100); $mailboxNumber = 0
+
 foreach ($recipient in $workingRecipients)
 {
     #Rest the working variables for this recipient.
@@ -134,6 +136,9 @@ foreach ($recipient in $workingRecipients)
     
         $outputArray += $functionObject
     }
+
+    $mailboxCounter++
+    $mailboxNumber++
 }
 
 write-host "Concluded testing for locations - output array." -ForegroundColor Green -BackgroundColor Yellow
