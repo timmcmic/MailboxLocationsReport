@@ -85,7 +85,7 @@ try {
         6
         {
             write-host "Guest Recipients"
-            $workingRecipients = get-recipient -filter {RecipientTypeDetails "GuestMailUser"} -resultsize unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+            $workingRecipients = get-recipient -filter {RecipientTypeDetails -eq "GuestMailUser"} -resultsize unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
         }
         default
         {
