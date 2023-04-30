@@ -52,7 +52,23 @@ $userChoice = Read-Host "Enter Selection"
 
 try {
     write-host "Gathering all Office 365 Recipients"
-    $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+
+    switch ($userChoice)
+    {
+        #Command for option 1.
+
+        1
+        {
+            write-host "Select All Recipients"
+            $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+        }
+        default
+        {
+            write-host "Default no selection - all recipients."
+            $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+        }
+    }
+
 }
 catch {
     write-host "Unable to obtain all recipients in Office 365."
