@@ -87,14 +87,12 @@ try {
             write-host "Guest Recipients"
             $workingRecipients = get-recipient -filter {RecipientTypeDetails "GuestMailUser"} -resultsize unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
         }
-        }
         default
         {
             write-host "Default no selection - all recipients."
             $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
         }
     }
-
 }
 catch {
     write-host "Unable to obtain all recipients in Office 365."
