@@ -39,7 +39,7 @@ Write-Host "1 : All Recipients"
 Write-Host ""
 Write-Host "2 : Mailbox Enabled Recipients"
 Write-Host ""
-Write-Host "3 : Mailbox Enabled Recipients with Archives"
+Write-Host "3 : Mailbox Enabled Recipients with Archives Enabled"
 Write-Host ""
 Write-Host "4 : All Recipients with Archives"
 Write-Host ""
@@ -55,12 +55,30 @@ try {
 
     switch ($userChoice)
     {
-        #Command for option 1.
-
         1
         {
             write-host "Select All Recipients"
             $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+        }
+        2
+        {
+            write-host "Mailbox Enabled Recipients"
+            $workingRecipients = get-mailbox -resultsize unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+        }
+        3
+        {
+            write-host "Mailbox Enabled Recipients with Archives Enabled"
+            $workingRecipients = Get-Mailbox -ResultSize unlimited -Filter {archiveStatus -eq "Active"} -ErrorAction Stop | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+        }
+        4
+        {
+            write-host "All Recipients with Archives"
+            $workingRecipients = get-recipient -Filter {archiveStatus -eq "Active"} -resultsize Unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+        }
+        5
+        {
+            write-host "Office 365 / Unified Groups Only"
+            $workingRecipients = get-unifiedGroup -resultsize Unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
         }
         default
         {
