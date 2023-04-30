@@ -24,7 +24,29 @@
 [int]$recipientCounter = 1
 [int]$totalRecipients = 0
 
+[string]$userSelection = "0"
+
 $fullOutputPath = $outputFilePath + $outputFileName
+
+#There is the chance that an administrator only wants to gather a subset of information.  Provide the administrator with choices.
+
+
+Write-Host "========================================="
+Write-Host "         GENERATE MAILBOX REPORT"
+Write-Host "========================================="
+Write-Host ""
+Write-Host "1 : All Recipients"
+Write-Host ""
+Write-Host "2 : Mailbox Enabled Recipients"
+Write-Host ""
+Write-Host "3 : Mailbox Enabled Recipients with Archives"
+Write-Host ""
+Write-Host "4 : All Recipients with Archives"
+Write-Host ""
+Write-Host "5 : Office 365 / Unified Groups Only"
+Write-Host ""
+
+$userChoice = Read-Host "Enter Selection"
 
 #Capture all recipient objects in the organization.  This allows us to test for any componentShard or Office 365 groups which are not just mailboxes.
 
