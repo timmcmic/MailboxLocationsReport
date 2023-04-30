@@ -30,7 +30,7 @@ $fullOutputPath = $outputFilePath + $outputFileName
 
 try {
     write-host "Gathering all Office 365 Recipients"
-    $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited | select-object externalDirectoryObjectID,primarySMTPAddress
+    $workingRecipients = get-recipient -recipientTypeDetails GroupMailbox,UserMailbox,MailUser,GuestMailUser -resultsize Unlimited | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
 }
 catch {
     write-host "Unable to obtain all recipients in Office 365."
@@ -133,9 +133,11 @@ foreach ($recipient in $workingRecipients)
             HasComponentShard = $hasComponentShard
             HasAuxArchive = $hasAuxArchive
             NumberOfAuxArchives = $numberOfAuxArchives
+            RecipientType = $recipient.RecipientType
+            RecipientTypeDetails = $recipient.RecipientTypeDetails
         }
 
-        $functionObject = $functionObject | select-object ExternalDirectoryObjectID,PrimarySMTPAddress,LocationCount,HasPrimaryMailbox,HasMainArchive,HasComponentShard,HasAuxArchive,NumberOfAuxArchives
+        $functionObject = $functionObject | select-object ExternalDirectoryObjectID,PrimarySMTPAddress,LocationCount,HasPrimaryMailbox,HasMainArchive,HasComponentShard,HasAuxArchive,NumberOfAuxArchives,RecipientType,RecipientTypeDetails
     
         $outputArray += $functionObject
     }
