@@ -45,6 +45,8 @@ Write-Host "4 : All Recipients with Archives"
 Write-Host ""
 Write-Host "5 : Office 365 / Unified Groups Only"
 Write-Host ""
+Write-Host "6 : Guest Recipients"
+Write-Host ""
 
 $userChoice = Read-Host "Enter Selection"
 
@@ -79,6 +81,12 @@ try {
         {
             write-host "Office 365 / Unified Groups Only"
             $workingRecipients = get-unifiedGroup -resultsize Unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+        }
+        6
+        {
+            write-host "Guest Recipients"
+            $workingRecipients = get-recipient -filter {RecipientTypeDetails "GuestMailUser"} -resultsize unlimited -errorAction STOP | select-object externalDirectoryObjectID,primarySMTPAddress,RecipientType,RecipientTypeDetails
+        }
         }
         default
         {
