@@ -89,58 +89,65 @@ foreach ($recipient in $workingRecipients)
 
     #At this time we have gathered an object that has at least one or more locations.
 
-    write-host "Testing locations to generated output."
-
-    foreach ($location in $workingLocations)
+    if ($workingLocations.count -gt 0)
     {
-        if ($location.MailboxLocationType -eq $primaryMailboxString)
-        {
-            write-host "Primary mailbox found." -ForegroundColor Blue -BackgroundColor Yellow
+        write-host "Testing locations to generated output."
 
-            $hasPrimaryMailbox = $true
+        foreach ($location in $workingLocations)
+        {
+            if ($location.MailboxLocationType -eq $primaryMailboxString)
+            {
+                write-host "Primary mailbox found." -ForegroundColor Blue -BackgroundColor Yellow
+    
+                $hasPrimaryMailbox = $true
+            }
+            elseif ($location.MailboxLocationType -eq $mainArchiveString)
+            {
+                write-host "Primary archive found." -ForegroundColor Blue -BackgroundColor Yellow
+    
+                $hasMainArchive = $true
+            }
+            elseif ($location.MailboxLocationType -eq $ComponentSharedString)
+            {
+                write-host "Component shared found." -ForegroundColor Blue -BackgroundColor Yellow
+    
+                $hasComponentShard = $true
+            }
+            elseif ($location.MailboxLocationType -eq $ComponentSharedString)
+            {
+                write-host "Auto expanding archive found." -ForegroundColor Blue -BackgroundColor Yellow
+    
+                $hasAuxArchive = $true
+    
+                $numberOfAuxArchives=$numberOfAuxArchives+1
+            }
         }
-        elseif ($location.MailboxLocationType -eq $mainArchiveString)
+    
+        #At this point the location information has been generated.  Now we can generate the output object.
+    
+        if ($locationFound -eq $TRUE)
         {
-            write-host "Primary archive found." -ForegroundColor Blue -BackgroundColor Yellow
-
-            $hasMainArchive = $true
-        }
-        elseif ($location.MailboxLocationType -eq $ComponentSharedString)
-        {
-            write-host "Component shared found." -ForegroundColor Blue -BackgroundColor Yellow
-
-            $hasComponentShard = $true
-        }
-        elseif ($location.MailboxLocationType -eq $ComponentSharedString)
-        {
-            write-host "Auto expanding archive found." -ForegroundColor Blue -BackgroundColor Yellow
-
-            $hasAuxArchive = $true
-
-            $numberOfAuxArchives=$numberOfAuxArchives+1
+            $functionObject = New-Object PSObject -Property @{
+                ExternalDirectoryObjectID = $recipient.externalDirectoryObjectID  
+                PrimarySMTPAddress = $recipient.primarySMTPAddress
+                LocationCount = $workingLocations.count
+                HasPrimaryMailbox = $hasPrimaryMailbox
+                HasMainArchive = $hasMainArchive
+                HasComponentShard = $hasComponentShard
+                HasAuxArchive = $hasAuxArchive
+                NumberOfAuxArchives = $numberOfAuxArchives
+                RecipientType = $recipient.RecipientType
+                RecipientTypeDetails = $recipient.RecipientTypeDetails
+            }
+    
+            $functionObject = $functionObject | select-object ExternalDirectoryObjectID,PrimarySMTPAddress,LocationCount,HasPrimaryMailbox,HasMainArchive,HasComponentShard,HasAuxArchive,NumberOfAuxArchives,RecipientType,RecipientTypeDetails
+        
+            $outputArray += $functionObject
         }
     }
-
-    #At this point the location information has been generated.  Now we can generate the output object.
-
-    if ($locationFound -eq $TRUE)
+    else 
     {
-        $functionObject = New-Object PSObject -Property @{
-            ExternalDirectoryObjectID = $recipient.externalDirectoryObjectID  
-            PrimarySMTPAddress = $recipient.primarySMTPAddress
-            LocationCount = $workingLocations.count
-            HasPrimaryMailbox = $hasPrimaryMailbox
-            HasMainArchive = $hasMainArchive
-            HasComponentShard = $hasComponentShard
-            HasAuxArchive = $hasAuxArchive
-            NumberOfAuxArchives = $numberOfAuxArchives
-            RecipientType = $recipient.RecipientType
-            RecipientTypeDetails = $recipient.RecipientTypeDetails
-        }
-
-        $functionObject = $functionObject | select-object ExternalDirectoryObjectID,PrimarySMTPAddress,LocationCount,HasPrimaryMailbox,HasMainArchive,HasComponentShard,HasAuxArchive,NumberOfAuxArchives,RecipientType,RecipientTypeDetails
-    
-        $outputArray += $functionObject
+        write-host "Location count is not greater than zero - although command failed no locations returned." -ForegroundColor Red -BackgroundColor Blue
     }
 }
 
